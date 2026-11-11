@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": ["ft_strlen.c"],
+  "harness": ["main.c"],
+  "allowed_functions": [],
+  "timeout": 2
+}

@@ -1,0 +1,7 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": ["first_word.c"],
+  "allowed_functions": ["write"],
+  "timeout": 2
+}

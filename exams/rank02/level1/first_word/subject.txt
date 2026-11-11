@@ -1,0 +1,24 @@
+Assignment name  : first_word
+Expected files   : first_word.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string as its only argument and displays the first
+word of that string, followed by a newline.
+
+A word is a sequence of characters delimited by spaces, tabs, or the beginning
+or end of the string.
+
+If the program does not receive exactly one argument, or if the string contains
+no word, it displays only a newline.
+
+Examples:
+
+$> ./first_word "hello exam" | cat -e
+hello$
+$> ./first_word "   	  leading blanks are skipped" | cat -e
+leading$
+$> ./first_word "a" "b" | cat -e
+$
+$> ./first_word | cat -e
+$

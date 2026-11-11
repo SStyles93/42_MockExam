@@ -1,0 +1,17 @@
+{
+  "c": {
+    "requires": ["cc"],
+    "source_ext": ".c",
+    "build": ["{cc}", "-Wall", "-Wextra", "-Werror", "{sources}", "-o", "{bin}"],
+    "object": ["{cc}", "-Wall", "-Wextra", "-Werror", "-c", "{source}", "-o", "{obj}"],
+    "run": ["{bin}", "{args}"],
+    "symbol_check": true
+  },
+  "python": {
+    "requires": [],
+    "source_ext": ".py",
+    "build": null,
+    "run": ["{python}", "{main}", "{args}"],
+    "symbol_check": false
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "title": "Exam Rank 02",
+  "duration_minutes": 180,
+  "reroll_on_fail": false,
+  "levels": ["level1"]
+}

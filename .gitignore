@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# MockExam runtime files
+rendu/
+subjects/
+traces/
+archive/
+.session.json
