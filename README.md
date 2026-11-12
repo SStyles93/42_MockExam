@@ -22,6 +22,7 @@ Without options it resumes the current session, or starts a new exam.
 | `-t` | `--selftest` | check every reference solution passes its own tests |
 | `-g` | `--git` | practice mode: grade only what was pushed (always on in exams) |
 | `-y` | `--yes` | skip confirmation questions |
+| | `--no-update` | do not update MockExam before starting |
 | `-h` | `--help` | show help |
 
 `-r`, `-c`, `-l` and `-t` are commands and cannot be combined with each other. `-e`, `-p`, `-g` and `-y` modify them:
@@ -32,6 +33,8 @@ python3 exam.py -p ft_strlen        # practice a given exercise
 python3 exam.py -p -g               # practice, with the git push workflow
 python3 exam.py -c -y -e rank02     # clear without asking, start rank02
 ```
+
+**Automatic update:** when MockExam was installed with `git clone`, every launch first runs `git pull --ff-only` (15 s max, never asks for a password) and restarts on the new version if anything changed. Being offline, having local edits or a diverged branch only prints a one-line note and the current version runs. Your work (`rendu/`, `traces/`, `archive/`, ...) is git-ignored and never touched. Disable with `--no-update` or `MOCKEXAM_NO_UPDATE=1`.
 
 Inside the shell:
 

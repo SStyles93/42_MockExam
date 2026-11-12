@@ -10,6 +10,7 @@
     -t, --selftest                  check every reference solution passes its own tests
     -g, --git                       practice: grade only what was pushed (always on in exams)
     -y, --yes                       skip confirmation questions
+    --no-update                     do not git pull the latest version first
 """
 from __future__ import annotations
 
@@ -23,12 +24,13 @@ import os
 import random
 import shutil
 import stat
+import subprocess
 import tempfile
 import time
 from pathlib import Path
 from typing import Optional
 
-from engine import ui, vcs
+from engine import ui, update, vcs
 from engine.exercise import Exam, Exercise, ExerciseError, list_exams, load_exam
 from engine.runner import Toolchain, grade, load_languages
 from engine.session import Session
@@ -430,7 +432,18 @@ def main() -> int:
                         help="practice mode: grade only what was pushed (always on in exams)")
     parser.add_argument("-y", "--yes", action="store_true",
                         help="skip confirmation questions")
+    parser.add_argument("--no-update", action="store_true",
+                        help="do not git pull the latest MockExam before starting")
     args = parser.parse_args()
+    if not args.no_update:
+        changed, message = update.self_update(ROOT)
+        if message:
+            print(ui.green(message) if changed else ui.dim(message))
+        if changed:  # run the new code, not the modules already loaded
+            sys.stdout.flush()  # our message must appear before the child's output
+            env = dict(os.environ, **{update.SKIP_ENV: "1"})
+            return subprocess.call([sys.executable, str(Path(__file__).resolve())]
+                                   + sys.argv[1:], env=env)
     if (args.list or args.selftest) and (args.exam or args.practice is not None
                                          or args.yes or args.git):
         parser.error("-l/--list and -t/--selftest take no other option")
