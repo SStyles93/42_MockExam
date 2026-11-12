@@ -1,0 +1,21 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "*.c",
+    "*.h"
+  ],
+  "allowed_functions": [
+    "atoi",
+    "fprintf",
+    "write",
+    "calloc",
+    "malloc",
+    "free",
+    "realloc",
+    "stdout",
+    "stderr"
+  ],
+  "compare": "sorted_lines",
+  "timeout": 5
+}

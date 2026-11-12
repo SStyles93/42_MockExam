@@ -1,0 +1,11 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "alpha_mirror.c"
+  ],
+  "allowed_functions": [
+    "write"
+  ],
+  "timeout": 2
+}

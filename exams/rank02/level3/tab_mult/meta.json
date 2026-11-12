@@ -1,0 +1,11 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "tab_mult.c"
+  ],
+  "allowed_functions": [
+    "write"
+  ],
+  "timeout": 2
+}

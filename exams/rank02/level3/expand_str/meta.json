@@ -1,0 +1,11 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "expand_str.c"
+  ],
+  "allowed_functions": [
+    "write"
+  ],
+  "timeout": 2
+}

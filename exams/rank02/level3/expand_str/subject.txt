@@ -1,0 +1,23 @@
+Assignment name  : expand_str
+Expected files   : expand_str.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it with exactly three spaces
+between words, and no spaces or tabs at the beginning or the end, followed by a
+newline.
+
+A word is a sequence of characters delimited by spaces, tabs, or the beginning
+or end of the string.
+
+If the number of arguments is not 1, or if there is no word, display only a
+newline.
+
+Examples:
+
+$> ./expand_str "  one two	three  " | cat -e
+one   two   three$
+$> ./expand_str "single" | cat -e
+single$
+$> ./expand_str "" | cat -e
+$

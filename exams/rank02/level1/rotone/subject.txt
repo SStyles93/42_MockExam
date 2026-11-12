@@ -1,0 +1,20 @@
+Assignment name  : rotone
+Expected files   : rotone.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it with every letter replaced
+by the letter 1 positions further in the alphabet, wrapping around after 'z'
+('z' becomes 'a' and 'Z' becomes 'A'). Case is kept; other characters
+are unchanged. The output is followed by a newline.
+
+If the number of arguments is not 1, display only a newline.
+
+Examples:
+
+$> ./rotone "Zebra crossing" | cat -e
+Afcsb dspttjoh$
+$> ./rotone "abc xyz 42" | cat -e
+bcd yza 42$
+$> ./rotone | cat -e
+$

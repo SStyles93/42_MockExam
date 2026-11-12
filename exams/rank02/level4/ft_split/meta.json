@@ -1,0 +1,14 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "ft_split.c"
+  ],
+  "allowed_functions": [
+    "malloc"
+  ],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "print_bits.c"
+  ],
+  "allowed_functions": [
+    "write"
+  ],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

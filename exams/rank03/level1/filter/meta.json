@@ -1,0 +1,27 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "filter.c"
+  ],
+  "allowed_functions": [
+    "read",
+    "write",
+    "strlen",
+    "memmem",
+    "memmove",
+    "malloc",
+    "calloc",
+    "realloc",
+    "free",
+    "printf",
+    "fprintf",
+    "stdout",
+    "stderr",
+    "perror"
+  ],
+  "harness": [
+    "short_reads.c"
+  ],
+  "timeout": 3
+}

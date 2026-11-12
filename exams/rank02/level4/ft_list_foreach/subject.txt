@@ -1,0 +1,21 @@
+Assignment name  : ft_list_foreach
+Expected files   : ft_list_foreach.c, ft_list.h
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that takes a list and a function pointer, and applies the
+function to the data of every element of the list, in order.
+
+Your function must be declared as follows:
+
+void	ft_list_foreach(t_list *begin_list, void (*f)(void *));
+
+The function f is called like this: (*f)(list_ptr->data);
+
+Turn in the t_list type in a file named ft_list.h:
+
+typedef struct s_list
+{
+	struct s_list	*next;
+	void			*data;
+}	t_list;

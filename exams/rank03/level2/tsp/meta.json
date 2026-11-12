@@ -1,0 +1,41 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "*.c",
+    "*.h"
+  ],
+  "allowed_functions": [
+    "write",
+    "sqrtf",
+    "getline",
+    "fseek",
+    "fscanf",
+    "ferror",
+    "feof",
+    "fabsf",
+    "memcpy",
+    "fprintf",
+    "fclose",
+    "malloc",
+    "calloc",
+    "realloc",
+    "free",
+    "fopen",
+    "errno",
+    "stderr",
+    "stdin",
+    "stdout"
+  ],
+  "ldflags": [
+    "-lm"
+  ],
+  "compare": "numeric",
+  "tolerance": 0.01,
+  "timeout": 10,
+  "starter": [
+    "grid.txt",
+    "square.txt",
+    "tsp.c"
+  ]
+}

@@ -76,6 +76,56 @@ class Exercise:
         return [self.path / h for h in self.meta.get("harness", [])]
 
     @property
+    def cflags(self) -> List[str]:
+        return list(self.meta.get("cflags", []))
+
+    @property
+    def ldflags(self) -> List[str]:
+        return list(self.meta.get("ldflags", []))
+
+    @property
+    def variants(self) -> List[dict]:
+        """Builds to test, e.g. several -D BUFFER_SIZE values. Each runs every case."""
+        return self.meta.get("variants") or [{"name": "", "cflags": []}]
+
+    @property
+    def compare(self) -> str:
+        """"exact" (default), "sorted_lines" or "numeric"."""
+        return self.meta.get("compare", "exact")
+
+    @property
+    def tolerance(self) -> float:
+        return float(self.meta.get("tolerance", 0.01))
+
+    @property
+    def leak_check(self) -> bool:
+        return bool(self.meta.get("leak_check", False))
+
+    @property
+    def starter(self) -> List[Path]:
+        """Files given to the student in subjects/ only (never used to build)."""
+        return [self.path / p for p in self.meta.get("starter", [])]
+
+    def collect_files(self, directory: Path):
+        """Resolve `files` (which may contain *.c style patterns) in a directory.
+        Returns (names found, required names missing)."""
+        names: List[str] = []
+        missing: List[str] = []
+        for pattern in self.files:
+            if any(ch in pattern for ch in "*?["):
+                names += sorted(p.name for p in directory.glob(pattern) if p.is_file())
+            elif (directory / pattern).is_file():
+                names.append(pattern)
+            else:
+                missing.append(pattern)
+        return list(dict.fromkeys(names)), missing
+
+    @property
+    def provided(self) -> List[Path]:
+        """Files handed to the student (e.g. a header) and used for every build."""
+        return [self.path / p for p in self.meta.get("provided", [])]
+
+    @property
     def reference_dir(self) -> Path:
         return self.path / "reference"
 

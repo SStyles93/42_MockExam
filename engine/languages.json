@@ -2,8 +2,8 @@
   "c": {
     "requires": ["cc"],
     "source_ext": ".c",
-    "build": ["{cc}", "-Wall", "-Wextra", "-Werror", "{sources}", "-o", "{bin}"],
-    "object": ["{cc}", "-Wall", "-Wextra", "-Werror", "-c", "{source}", "-o", "{obj}"],
+    "build": ["{cc}", "-Wall", "-Wextra", "-Werror", "{cflags}", "{sources}", "-o", "{bin}", "{ldflags}"],
+    "object": ["{cc}", "-Wall", "-Wextra", "-Werror", "{cflags}", "-c", "{source}", "-o", "{obj}"],
     "run": ["{bin}", "{args}"],
     "symbol_check": true
   },

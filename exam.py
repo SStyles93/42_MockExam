@@ -84,6 +84,8 @@ class Shell:
             shutil.rmtree(SUBJECTS_DIR)
         (SUBJECTS_DIR / ex.name).mkdir(parents=True)
         (SUBJECTS_DIR / ex.name / "subject.txt").write_text(ex.subject(), encoding="utf-8")
+        for path in ex.provided + ex.starter:
+            shutil.copy2(path, SUBJECTS_DIR / ex.name / path.name)
         (RENDU_DIR / ex.name).mkdir(parents=True, exist_ok=True)
         print()
         print(ui.bold(f"New assignment: {ex.name}") + ui.dim(f"  ({ex.level})"))

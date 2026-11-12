@@ -1,0 +1,13 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "rostring.c"
+  ],
+  "allowed_functions": [
+    "write",
+    "malloc",
+    "free"
+  ],
+  "timeout": 2
+}

@@ -1,0 +1,14 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "*.c",
+    "*.h"
+  ],
+  "allowed_functions": [
+    "puts",
+    "write"
+  ],
+  "compare": "sorted_lines",
+  "timeout": 5
+}

@@ -1,0 +1,24 @@
+Assignment name  : hidenp
+Expected files   : hidenp.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes two strings and displays 1 followed by a newline if
+the first string is hidden in the second one, or 0 followed by a newline
+otherwise.
+
+The string s1 is hidden in s2 if every character of s1 can be found in s2, in
+the same order. The empty string is hidden in any string.
+
+If the number of arguments is not 2, display only a newline.
+
+Examples:
+
+$> ./hidenp "abc" "xaybzc" | cat -e
+1$
+$> ./hidenp "abc" "cba" | cat -e
+0$
+$> ./hidenp "" "anything" | cat -e
+1$
+$> ./hidenp | cat -e
+$

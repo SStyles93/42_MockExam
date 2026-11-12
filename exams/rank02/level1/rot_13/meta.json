@@ -1,0 +1,11 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "rot_13.c"
+  ],
+  "allowed_functions": [
+    "write"
+  ],
+  "timeout": 2
+}

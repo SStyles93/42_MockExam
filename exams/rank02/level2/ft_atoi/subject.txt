@@ -1,0 +1,15 @@
+Assignment name  : ft_atoi
+Expected files   : ft_atoi.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that converts the beginning of the string str to an int and
+returns it, like the standard atoi function (man atoi):
+
+- leading whitespace (spaces and '\t' '\n' '\v' '\f' '\r') is skipped,
+- an optional single '+' or '-' sign follows,
+- then digits are read until the first non-digit character.
+
+Your function must be declared as follows:
+
+int	ft_atoi(const char *str);

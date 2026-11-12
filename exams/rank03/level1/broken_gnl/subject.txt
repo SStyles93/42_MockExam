@@ -1,0 +1,28 @@
+Assignment name  : broken_gnl
+Expected files   : get_next_line.c, get_next_line.h
+Allowed functions: read, free, malloc
+--------------------------------------------------------------------------------
+
+The files get_next_line.c and get_next_line.h next to this subject contain an
+implementation of get_next_line that does not work. Repair it (you may have to
+fix several functions), then turn in both files.
+
+char	*get_next_line(int fd);
+
+get_next_line returns the next line read from the file descriptor fd:
+- A line is a sequence of 0 to n characters ending with '\n' or with the end
+  of file. The returned line includes the '\n' when there is one.
+- At the end of file, the remaining content is returned; if there is none,
+  NULL is returned. NULL is also returned on error.
+- Every returned line must be freeable with free().
+- Called in a loop, it reads the whole input one line at a time, whatever the
+  size of the input or of its lines.
+
+Your code is compiled with -D BUFFER_SIZE=xx, which must be used as the size of
+your read() calls. It will be tested with several values.
+
+There must be no memory leak: once the end of file is reached, nothing
+allocated with malloc may remain, except the lines already returned.
+
+No other function is called on fd between two calls to get_next_line, and the
+behavior on binary files is undefined.

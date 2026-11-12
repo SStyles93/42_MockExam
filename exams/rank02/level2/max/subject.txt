@@ -1,0 +1,13 @@
+Assignment name  : max
+Expected files   : max.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that returns the largest number in an array of integers.
+
+The first parameter is the array, the second is its number of elements. If
+the array is empty, the function returns 0.
+
+Your function must be declared as follows:
+
+int	max(int *tab, unsigned int len);

@@ -1,0 +1,12 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "flood_fill.c"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

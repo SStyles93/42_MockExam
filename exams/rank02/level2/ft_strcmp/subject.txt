@@ -1,0 +1,12 @@
+Assignment name  : ft_strcmp
+Expected files   : ft_strcmp.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Reproduce the behavior of the standard strcmp function (man strcmp): compare
+the strings s1 and s2 and return a negative, zero or positive value depending
+on whether s1 is lower than, equal to, or greater than s2.
+
+Your function must be declared as follows:
+
+int	ft_strcmp(char *s1, char *s2);

@@ -1,0 +1,12 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "is_power_of_2.c"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

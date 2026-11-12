@@ -1,0 +1,12 @@
+Assignment name  : ft_strcspn
+Expected files   : ft_strcspn.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Reproduce exactly the behavior of the standard strcspn function
+(man strcspn): return the length of the initial part of s made only of
+characters that are NOT in reject.
+
+Your function must be declared as follows:
+
+size_t	ft_strcspn(const char *s, const char *reject);

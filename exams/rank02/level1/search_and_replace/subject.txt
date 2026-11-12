@@ -1,0 +1,24 @@
+Assignment name  : search_and_replace
+Expected files   : search_and_replace.c
+Allowed functions: write, exit
+--------------------------------------------------------------------------------
+
+Write a program that takes 3 arguments: a string, a letter to search for, and
+a letter to replace it with. It displays the string with every occurrence of
+the second argument replaced by the third, followed by a newline.
+
+If the number of arguments is not 3, or if the second or third argument is not
+exactly one character long, display only a newline.
+
+If the character is not found, the string is displayed unchanged.
+
+Examples:
+
+$> ./search_and_replace "banana bread" "a" "o" | cat -e
+bonono breod$
+$> ./search_and_replace "banana" "x" "y" | cat -e
+banana$
+$> ./search_and_replace "banana" "an" "o" | cat -e
+$
+$> ./search_and_replace "banana" "a" | cat -e
+$

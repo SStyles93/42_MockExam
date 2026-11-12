@@ -1,0 +1,14 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "ft_putstr.c"
+  ],
+  "allowed_functions": [
+    "write"
+  ],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

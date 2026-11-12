@@ -1,0 +1,12 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "search_and_replace.c"
+  ],
+  "allowed_functions": [
+    "write",
+    "exit"
+  ],
+  "timeout": 2
+}

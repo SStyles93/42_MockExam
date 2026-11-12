@@ -1,0 +1,12 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "lcm.c"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

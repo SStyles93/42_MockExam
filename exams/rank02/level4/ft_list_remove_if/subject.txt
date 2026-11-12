@@ -1,0 +1,22 @@
+Assignment name  : ft_list_remove_if
+Expected files   : ft_list_remove_if.c
+Allowed functions: free
+--------------------------------------------------------------------------------
+
+Write a function that removes from the list every element whose data is
+"equal" to data_ref, and frees the removed elements.
+
+Your function must be declared as follows:
+
+void	ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)());
+
+cmp takes two void * and returns 0 when they are equal; call it as
+(*cmp)(list_ptr->data, data_ref).
+
+Use the t_list type from the ft_list.h file provided next to this subject:
+
+typedef struct s_list
+{
+	struct s_list	*next;
+	void			*data;
+}	t_list;

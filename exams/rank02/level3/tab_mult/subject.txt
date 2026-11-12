@@ -1,0 +1,27 @@
+Assignment name  : tab_mult
+Expected files   : tab_mult.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that displays the multiplication table (from 1 to 9) of the
+number given as argument.
+
+The argument is always a strictly positive number that fits in an int, and
+that number times 9 also fits in an int.
+
+If there is no argument, display only a newline.
+
+Examples:
+
+$> ./tab_mult 7
+1 x 7 = 7
+2 x 7 = 14
+3 x 7 = 21
+4 x 7 = 28
+5 x 7 = 35
+6 x 7 = 42
+7 x 7 = 49
+8 x 7 = 56
+9 x 7 = 63
+$> ./tab_mult | cat -e
+$

@@ -1,0 +1,14 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "pgcd.c"
+  ],
+  "allowed_functions": [
+    "printf",
+    "atoi",
+    "malloc",
+    "free"
+  ],
+  "timeout": 2
+}

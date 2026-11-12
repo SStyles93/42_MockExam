@@ -1,0 +1,12 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "fprime.c"
+  ],
+  "allowed_functions": [
+    "printf",
+    "atoi"
+  ],
+  "timeout": 2
+}

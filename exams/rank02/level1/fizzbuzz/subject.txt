@@ -1,0 +1,30 @@
+Assignment name  : fizzbuzz
+Expected files   : fizzbuzz.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that prints every integer from 1 to 100, one per line.
+
+- A multiple of 3 is replaced by "fizz".
+- A multiple of 5 is replaced by "buzz".
+- A multiple of both 3 and 5 is replaced by "fizzbuzz".
+
+Example:
+
+$> ./fizzbuzz | head -16 | cat -e
+1$
+2$
+fizz$
+4$
+buzz$
+fizz$
+7$
+8$
+fizz$
+buzz$
+11$
+fizz$
+13$
+14$
+fizzbuzz$
+16$

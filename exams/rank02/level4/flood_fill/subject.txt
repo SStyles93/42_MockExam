@@ -1,0 +1,33 @@
+Assignment name  : flood_fill
+Expected files   : flood_fill.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that takes a 2-dimensional array of char, its dimensions, and
+a starting point. Starting from 'begin', it replaces every character of the
+zone containing that point with 'F'.
+
+A zone is a group of identical characters connected horizontally or
+vertically (never diagonally), bounded by other characters or by the edges of
+the array.
+
+Your function must be declared as follows:
+
+void	flood_fill(char **tab, t_point size, t_point begin);
+
+The t_point type must be defined in flood_fill.c as follows:
+
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}	t_point;
+
+tab[y][x] is the character at column x, row y; size.x is the number of columns
+and size.y the number of rows.
+
+Example, with begin = {2, 1}:
+
+  1100        1100
+  1000   ->   1FFF
+  0011        FF11

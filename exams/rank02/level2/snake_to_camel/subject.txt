@@ -1,0 +1,22 @@
+Assignment name  : snake_to_camel
+Expected files   : snake_to_camel.c
+Allowed functions: malloc, free, realloc, write
+--------------------------------------------------------------------------------
+
+Write a program that takes a single string in snake_case and displays it
+converted to lowerCamelCase, followed by a newline.
+
+- snake_case: words are all lowercase and separated by '_' ("get_next_line").
+- lowerCamelCase: every word starts with an uppercase letter, except the first
+  one, which is all lowercase ("getNextLine").
+
+If the number of arguments is not 1, display only a newline.
+
+Examples:
+
+$> ./snake_to_camel "get_next_line" | cat -e
+getNextLine$
+$> ./snake_to_camel "is_a_valid_input" | cat -e
+isAValidInput$
+$> ./snake_to_camel | cat -e
+$

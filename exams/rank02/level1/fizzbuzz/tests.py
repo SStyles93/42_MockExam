@@ -1,0 +1,2 @@
+def cases(rng):
+    return [[]]

@@ -1,0 +1,20 @@
+Assignment name  : ft_list_size
+Expected files   : ft_list_size.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that returns the number of elements in the linked list passed
+as parameter.
+
+Your function must be declared as follows:
+
+int	ft_list_size(t_list *begin_list);
+
+Use the t_list type from the ft_list.h file provided next to this subject
+(#include "ft_list.h"):
+
+typedef struct s_list
+{
+	struct s_list	*next;
+	void			*data;
+}	t_list;

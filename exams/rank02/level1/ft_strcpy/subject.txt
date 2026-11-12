@@ -1,0 +1,11 @@
+Assignment name  : ft_strcpy
+Expected files   : ft_strcpy.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Reproduce the behavior of the standard strcpy function (man strcpy): copy the
+string s2, including its terminating '\0', into s1, and return s1.
+
+Your function must be declared as follows:
+
+char	*ft_strcpy(char *s1, char *s2);

@@ -1,0 +1,13 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "ft_list_foreach.c",
+    "ft_list.h"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "snake_to_camel.c"
+  ],
+  "allowed_functions": [
+    "malloc",
+    "free",
+    "realloc",
+    "write"
+  ],
+  "timeout": 2
+}

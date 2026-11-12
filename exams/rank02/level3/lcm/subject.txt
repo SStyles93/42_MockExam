@@ -1,0 +1,15 @@
+Assignment name  : lcm
+Expected files   : lcm.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that takes two unsigned integers and returns their LCM
+(lowest common multiple): the smallest positive integer divisible by both.
+
+If at least one of the numbers is 0, the LCM is 0.
+
+Hint: LCM(a, b) = a * b / GCD(a, b), where GCD is the greatest common divisor.
+
+Your function must be declared as follows:
+
+unsigned int	lcm(unsigned int a, unsigned int b);

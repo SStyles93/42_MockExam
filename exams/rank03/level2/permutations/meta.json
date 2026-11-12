@@ -1,0 +1,17 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "*.c",
+    "*.h"
+  ],
+  "allowed_functions": [
+    "puts",
+    "malloc",
+    "calloc",
+    "realloc",
+    "free",
+    "write"
+  ],
+  "timeout": 5
+}

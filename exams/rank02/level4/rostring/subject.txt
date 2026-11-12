@@ -1,0 +1,28 @@
+Assignment name  : rostring
+Expected files   : rostring.c
+Allowed functions: write, malloc, free
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it rotated by one word to the
+left: the first word becomes the last one, and the other words keep their
+order. Words are separated by a single space in the output, which is followed
+by a newline.
+
+A word is a sequence of characters delimited by spaces, tabs, or the beginning
+or end of the string.
+
+If there is no argument, display only a newline. If there are several
+arguments, only the first one is used.
+
+Examples:
+
+$> ./rostring "one two three" | cat -e
+two three one$
+$> ./rostring "   spaced    out   words " | cat -e
+out words spaced$
+$> ./rostring "solo   " | cat -e
+solo$
+$> ./rostring "first" "ignored" | cat -e
+first$
+$> ./rostring | cat -e
+$

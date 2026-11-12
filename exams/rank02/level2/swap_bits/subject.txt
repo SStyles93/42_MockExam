@@ -1,0 +1,18 @@
+Assignment name  : swap_bits
+Expected files   : swap_bits.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that takes a byte, swaps its two halves (the 4 high bits and
+the 4 low bits) and returns the result.
+
+Your function must be declared as follows:
+
+unsigned char	swap_bits(unsigned char octet);
+
+Example:
+
+  0100 | 0001   (65)
+      \ /
+      / \
+  0001 | 0100   (20)

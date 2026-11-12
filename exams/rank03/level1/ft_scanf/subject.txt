@@ -1,0 +1,26 @@
+Assignment name  : ft_scanf
+Expected files   : ft_scanf.c
+Allowed functions: fgetc, ungetc, ferror, feof, isspace, isdigit, stdin, va_start, va_arg, va_copy, va_end
+--------------------------------------------------------------------------------
+
+Write a function ft_scanf that behaves like the standard scanf, limited to:
+- the conversions %s, %d and %c only,
+- no '*', 'm' or '\'' options, no maximum field width, no type modifiers
+  (h, hh, l, ...) and no %n$ conversions.
+
+Your function must be declared as follows:
+
+int	ft_scanf(const char *format, ...);
+
+It returns the number of successful conversions, or EOF if the input ends
+before anything could be read.
+
+A starting file, ft_scanf.c, is provided next to this subject: it already
+contains ft_scanf, the main loop and the conversion dispatch. Complete the
+functions marked "write your code here".
+
+Compare your results with the real scanf (man 3 scanf). Remember that:
+- a whitespace character in the format matches any amount of whitespace in
+  the input, including none,
+- %d and %s skip leading whitespace, %c does not,
+- any other character of the format must match the input exactly.

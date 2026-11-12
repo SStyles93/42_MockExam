@@ -1,0 +1,22 @@
+Assignment name  : repeat_alpha
+Expected files   : repeat_alpha.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it with each letter repeated
+as many times as its position in the alphabet, followed by a newline.
+
+'a' is printed once, 'b' twice, 'c' three times, ... 'z' 26 times. Uppercase
+letters follow the same rule and keep their case. Other characters are
+printed once.
+
+If the number of arguments is not 1, display only a newline.
+
+Examples:
+
+$> ./repeat_alpha "cab 42" | cat -e
+cccabb 42$
+$> ./repeat_alpha "Dd" | cat -e
+DDDDdddd$
+$> ./repeat_alpha | cat -e
+$

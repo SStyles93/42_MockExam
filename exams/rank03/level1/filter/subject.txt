@@ -1,0 +1,31 @@
+Assignment name  : filter
+Expected files   : filter.c
+Allowed functions: read, write, strlen, memmem, memmove, malloc, calloc, realloc, free, printf, fprintf, stdout, stderr, perror
+--------------------------------------------------------------------------------
+
+Write a program that takes exactly one argument, a non-empty string s.
+
+It reads everything from the standard input and writes it to the standard
+output, with every occurrence of s replaced by as many '*' as s has characters.
+Occurrences are searched from left to right and do not overlap: it behaves like
+sed 's/<s>/<as many stars>/g'.
+
+Your read() calls will not always return as many bytes as you ask for: the
+tests use a read() that returns random, smaller amounts. Handle it.
+
+If a read() or a malloc() fails, write "Error: " followed by the error message
+to the standard error, and return 1.
+
+If the program receives no argument, an empty argument, or more than one
+argument, it returns 1 (without reading anything).
+
+Examples:
+
+$> echo 'the cat sat on the mat' | ./filter at | cat -e
+the c** s** on the m**$
+$> echo 'aaaaa' | ./filter aa | cat -e
+****a$
+$> echo 'abababc' | ./filter abc | cat -e
+abab***$
+$> ./filter; echo "exit code: $?"
+exit code: 1

@@ -60,14 +60,23 @@ In **exam mode** a failure only tells you where the trace is (like the real exam
 | Python 3.8+ | standard library only |
 | `cc` / `gcc` / `clang` | for C exams (override with `CC=...`) |
 | `nm` | for the allowed-functions check (override with `NM=...`); skipped with a note if missing |
-| Linux / macOS / WSL | native Windows lacks POSIX headers such as `unistd.h` |
+| `valgrind` | optional, for leak checks (rank03 `broken_gnl`); skipped with a note if missing |
+| Linux / macOS / WSL | native Windows lacks POSIX headers such as `unistd.h`; `filter`'s short-read test is Linux-only |
+
+## Exams
+
+| Exam | Levels | Exercises |
+|---|---|---|
+| `rank02` | 4 | 55 (12 / 18 / 15 / 10) |
+| `rank03` | 2 | 8: `broken_gnl`, `filter`, `ft_scanf` / `n_queens`, `permutations`, `powerset`, `rip`, `tsp` |
 
 ## How grading works
 
 1. Only the expected files are copied from `rendu/<exercise>/` to a temp directory.
 2. Your code is compiled with `-Wall -Wextra -Werror`, together with the harness for function exercises.
 3. The object files are checked with `nm`: any external symbol not in `allowed_functions` fails the exercise. Compiler substitutions are tolerated (`printf` allows `puts`/`putchar`).
-4. The **reference solution** is built and both programs run on the same test cases: fixed edge cases plus random ones. stdout and exit code must match exactly, and crashes and timeouts are reported.
+4. The **reference solution** is built and both programs run on the same test cases: fixed edge cases plus random ones. stdout and exit code must match (exactly, or per the exercise's `compare` mode), and crashes and timeouts are reported.
+5. Exercises that require it are rebuilt with several flags (e.g. each `BUFFER_SIZE`) and checked for leaks with valgrind.
 
 Expected outputs are never written by hand: the reference solution *is* the expectation.
 
@@ -99,8 +108,22 @@ exams/rank02/
 }
 ```
 
-- `allowed_functions`: `[]` means none allowed; omit the key to disable the check.
-- `harness`: extra sources compiled with both the submission and the reference. For a function exercise this is a `main.c` that calls the function using the program arguments and prints the result.
+| Key | Meaning |
+|---|---|
+| `type` | `function` or `program` |
+| `language` | an entry of `engine/languages.json` (default `c`) |
+| `files` | expected files; patterns allowed (`["*.c", "*.h"]`) |
+| `allowed_functions` | `[]` means none allowed; omit the key to disable the check |
+| `harness` | extra sources compiled with both the submission and the reference: a `main.c` calling the function, or e.g. a `read()` wrapper for a program |
+| `provided` | files given to the student **and** always used to build (e.g. a header they must not turn in) |
+| `starter` | files only given to the student in `subjects/` (code to complete or repair, example inputs) |
+| `cflags` / `ldflags` | extra compiler / linker flags (e.g. `["-lm"]`) |
+| `variants` | several builds, each running every test: `[{"name": "BUFFER_SIZE=1", "cflags": ["-DBUFFER_SIZE=1"]}, ...]` |
+| `compare` | `exact` (default), `sorted_lines` (line order does not matter) or `numeric` (with `tolerance`, default 0.01) |
+| `leak_check` | run the first test cases under valgrind and fail on definite/indirect leaks |
+| `timeout` | seconds per run (default 2) |
+
+`tests.py` files can import random-input helpers from `engine/testgen.py` (`sentence`, `word`, `text`, ...).
 
 `tests.py` returns a list of cases. Each case is a list of arguments, or a dict:
 

@@ -1,0 +1,13 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "rev_wstr.c"
+  ],
+  "allowed_functions": [
+    "write",
+    "malloc",
+    "free"
+  ],
+  "timeout": 2
+}

@@ -1,0 +1,19 @@
+Assignment name  : reverse_bits
+Expected files   : reverse_bits.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that takes a byte, reverses the order of its bits (the most
+significant bit becomes the least significant one, and so on) and returns the
+result.
+
+Your function must be declared as follows:
+
+unsigned char	reverse_bits(unsigned char octet);
+
+Example:
+
+  0010 0110   (38)
+      ||
+      \/
+  0110 0100   (100)

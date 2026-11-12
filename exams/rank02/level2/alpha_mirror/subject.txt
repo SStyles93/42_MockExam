@@ -1,0 +1,19 @@
+Assignment name  : alpha_mirror
+Expected files   : alpha_mirror.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it with every letter replaced
+by its mirror in the alphabet ('a' <-> 'z', 'b' <-> 'y', 'c' <-> 'x', ...),
+followed by a newline. Case is kept; other characters are unchanged.
+
+If the number of arguments is not 1, display only a newline.
+
+Examples:
+
+$> ./alpha_mirror "abc xyz" | cat -e
+zyx cba$
+$> ./alpha_mirror "Hello 42" | cat -e
+Svool 42$
+$> ./alpha_mirror | cat -e
+$

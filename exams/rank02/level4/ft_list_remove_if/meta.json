@@ -1,0 +1,17 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "ft_list_remove_if.c"
+  ],
+  "allowed_functions": [
+    "free"
+  ],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ],
+  "provided": [
+    "ft_list.h"
+  ]
+}

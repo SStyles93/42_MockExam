@@ -1,0 +1,29 @@
+Assignment name  : powerset
+Expected files   : *.c, *.h
+Allowed functions: atoi, printf, fprintf, malloc, calloc, realloc, free, stdout, write
+--------------------------------------------------------------------------------
+
+Write a program that takes as arguments an integer n followed by a set s of
+distinct integers, and displays every subset of s whose elements add up to n.
+
+Each subset is displayed on its own line, its elements separated by spaces and
+kept in the same order as in s (so "1 2" and "2 1" can never both appear).
+The order of the lines does not matter.
+
+The empty subset is a subset of every set: its sum is 0, and it is displayed as
+an empty line.
+
+If a malloc fails, the program exits with code 1. Invalid sets (with
+duplicates) will not be tested.
+
+Examples:
+
+$> ./powerset 6 1 2 3 4 5 | cat -e
+2 4$
+1 5$
+1 2 3$
+$> ./powerset 0 3 -3 | cat -e
+$
+3 -3$
+$> ./powerset 100 1 2 3 | cat -e
+$>

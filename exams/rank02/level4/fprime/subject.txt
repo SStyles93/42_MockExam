@@ -1,0 +1,21 @@
+Assignment name  : fprime
+Expected files   : fprime.c
+Allowed functions: printf, atoi
+--------------------------------------------------------------------------------
+
+Write a program that takes a positive int and displays its prime factors in
+ascending order, separated by '*', followed by a newline.
+
+If the number of arguments is not 1, display only a newline. When there is an
+argument, it is always valid.
+
+Examples:
+
+$> ./fprime 60 | cat -e
+2*2*3*5$
+$> ./fprime 97 | cat -e
+97$
+$> ./fprime 1 | cat -e
+1$
+$> ./fprime 6 2 | cat -e
+$

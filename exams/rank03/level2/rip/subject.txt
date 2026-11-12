@@ -1,0 +1,25 @@
+Assignment name  : rip
+Expected files   : *.c, *.h
+Allowed functions: puts, write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string made only of parentheses. If they are not
+balanced, the program removes the minimum number of parentheses needed to
+balance them. "Removing" means replacing by a space.
+
+It displays every possible solution, one per line, in any order. A balanced
+string is displayed unchanged.
+
+Examples:
+
+$> ./rip '())' | cat -e
+( )$
+() $
+$> ./rip '(()()' | cat -e
+ ()()$
+( )()$
+(() )$
+$> ./rip '(())' | cat -e
+(())$
+$> ./rip ')(' | cat -e
+  $

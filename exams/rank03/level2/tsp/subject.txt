@@ -1,0 +1,39 @@
+Assignment name  : tsp
+Expected files   : *.c, *.h
+Allowed functions: write, sqrtf, getline, fseek, fscanf, ferror, feof, fabsf, memcpy, fprintf, fclose, malloc, calloc, realloc, free, fopen, errno, stderr, stdin, stdout
+--------------------------------------------------------------------------------
+
+The travelling salesman problem: given a set of cities, find the shortest
+closed path that visits every city exactly once and comes back to its start.
+
+Write a program that reads the coordinates of the cities from the standard
+input, one city per line in the format "%f, %f\n", and displays the length of
+the shortest closed path, in the format "%.2f\n".
+
+There will never be more than 11 cities.
+
+A starting file, tsp.c, is provided next to this subject: it reads the input
+and displays the result. Complete the tsp() function. Example inputs are
+provided too.
+
+Link with the math library to use sqrtf: add -lm at the end of your
+compilation command.
+
+Examples:
+
+$> cat square.txt
+1, 1
+0, 1
+1, 0
+0, 0
+$> ./tsp < square.txt | cat -e
+4.00$
+$> cat grid.txt
+0, 0
+1, 0
+2, 0
+0, 1
+1, 1
+2, 1
+$> ./tsp < grid.txt | cat -e
+6.00$

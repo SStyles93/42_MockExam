@@ -1,0 +1,13 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "do_op.c"
+  ],
+  "allowed_functions": [
+    "atoi",
+    "printf",
+    "write"
+  ],
+  "timeout": 2
+}

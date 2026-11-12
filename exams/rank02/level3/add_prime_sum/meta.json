@@ -1,0 +1,12 @@
+{
+  "type": "program",
+  "language": "c",
+  "files": [
+    "add_prime_sum.c"
+  ],
+  "allowed_functions": [
+    "write",
+    "exit"
+  ],
+  "timeout": 2
+}

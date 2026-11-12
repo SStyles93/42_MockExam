@@ -1,0 +1,15 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "sort_list.c"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ],
+  "provided": [
+    "list.h"
+  ]
+}

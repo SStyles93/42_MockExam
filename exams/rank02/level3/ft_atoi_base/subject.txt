@@ -1,0 +1,17 @@
+Assignment name  : ft_atoi_base
+Expected files   : ft_atoi_base.c
+Allowed functions: 
+--------------------------------------------------------------------------------
+
+Write a function that converts the string str, written in base str_base
+(2 <= str_base <= 16), to an int and returns it.
+
+The digits are "0123456789abcdef", limited to the first str_base of them
+(base 2 uses "01", base 16 uses all of them). Uppercase letters are accepted
+too: "ff" and "FF" are the same number.
+
+A '-' sign is only taken into account if it is the first character of str.
+
+Your function must be declared as follows:
+
+int	ft_atoi_base(const char *str, int str_base);

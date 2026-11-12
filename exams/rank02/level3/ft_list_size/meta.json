@@ -1,0 +1,15 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "ft_list_size.c"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ],
+  "provided": [
+    "ft_list.h"
+  ]
+}

@@ -1,0 +1,24 @@
+Assignment name  : permutations
+Expected files   : *.c, *.h
+Allowed functions: puts, malloc, calloc, realloc, free, write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays all of its permutations, one
+per line, in alphabetical order.
+
+The string will never contain the same character twice.
+
+Examples:
+
+$> ./permutations z | cat -e
+z$
+$> ./permutations ba | cat -e
+ab$
+ba$
+$> ./permutations cab | cat -e
+abc$
+acb$
+bac$
+bca$
+cab$
+cba$

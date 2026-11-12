@@ -1,0 +1,12 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "ft_swap.c"
+  ],
+  "allowed_functions": [],
+  "timeout": 2,
+  "harness": [
+    "main.c"
+  ]
+}

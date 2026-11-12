@@ -1,0 +1,27 @@
+Assignment name  : do_op
+Expected files   : do_op.c
+Allowed functions: atoi, printf, write
+--------------------------------------------------------------------------------
+
+Write a program that takes three arguments:
+- the first and third are base-10 signed integers that fit in an int,
+- the second is one arithmetic operator among: + - * / %
+
+It displays the result of the operation followed by a newline.
+
+If the number of arguments is not 3, display only a newline.
+
+You can assume the arguments are well formed, that negative numbers have a
+single leading '-', that no division or modulo by zero is requested, and that
+the result fits in an int.
+
+Examples:
+
+$> ./do_op "21" "*" "2" | cat -e
+42$
+$> ./do_op "-17" "%" "5" | cat -e
+-2$
+$> ./do_op "7" "/" "-2" | cat -e
+-3$
+$> ./do_op "1" "+" | cat -e
+$

@@ -1,0 +1,48 @@
+{
+  "type": "function",
+  "language": "c",
+  "files": [
+    "get_next_line.c",
+    "get_next_line.h"
+  ],
+  "allowed_functions": [
+    "read",
+    "free",
+    "malloc"
+  ],
+  "variants": [
+    {
+      "name": "BUFFER_SIZE=1",
+      "cflags": [
+        "-DBUFFER_SIZE=1"
+      ]
+    },
+    {
+      "name": "BUFFER_SIZE=3",
+      "cflags": [
+        "-DBUFFER_SIZE=3"
+      ]
+    },
+    {
+      "name": "BUFFER_SIZE=42",
+      "cflags": [
+        "-DBUFFER_SIZE=42"
+      ]
+    },
+    {
+      "name": "BUFFER_SIZE=10000",
+      "cflags": [
+        "-DBUFFER_SIZE=10000"
+      ]
+    }
+  ],
+  "leak_check": true,
+  "timeout": 5,
+  "harness": [
+    "main.c"
+  ],
+  "starter": [
+    "get_next_line.c",
+    "get_next_line.h"
+  ]
+}
