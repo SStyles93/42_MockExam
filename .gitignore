@@ -225,3 +225,4 @@ subjects/
 traces/
 archive/
 .session.json
+.vogsphere/

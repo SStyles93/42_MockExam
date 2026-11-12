@@ -20,14 +20,16 @@ Without options it resumes the current session, or starts a new exam.
 | `-c` | `--clear` | delete all exam data and archives, then a fresh exam (asks first) |
 | `-l` | `--list` | list exams and exercises |
 | `-t` | `--selftest` | check every reference solution passes its own tests |
+| `-g` | `--git` | practice mode: grade only what was pushed (always on in exams) |
 | `-y` | `--yes` | skip confirmation questions |
 | `-h` | `--help` | show help |
 
-`-r`, `-c`, `-l` and `-t` are commands and cannot be combined with each other. `-e`, `-p` and `-y` modify them:
+`-r`, `-c`, `-l` and `-t` are commands and cannot be combined with each other. `-e`, `-p`, `-g` and `-y` modify them:
 
 ```
 python3 exam.py -r -p               # restart into practice mode
 python3 exam.py -p ft_strlen        # practice a given exercise
+python3 exam.py -p -g               # practice, with the git push workflow
 python3 exam.py -c -y -e rank02     # clear without asking, start rank02
 ```
 
@@ -49,6 +51,19 @@ rendu/<exercise>/<files>          # write your code here
 traces/NNN-<exercise>.trace       # written after each grademe
 ```
 
+### Git, like the real exam
+
+In exam mode (and practice with `-g`), `rendu/` is a git repository whose remote is a local "fake vogsphere" (`.vogsphere/rendu.git`). As at 42, **only what was pushed is graded**:
+
+```
+cd rendu
+git add ft_strlen/ft_strlen.c
+git commit -m "ft_strlen"
+git push
+```
+
+Forgotten files, uncommitted edits and unpushed commits fail silently, exactly like the real exam: the trace just says the file was not found. If `git` is not installed, the files in `rendu/` are graded directly.
+
 Restarting (`-r`) moves your previous `rendu/` and `traces/` to `archive/<date>/`, so the new exam starts with an empty `rendu/` and no code is ever deleted. Clearing (`-c`) asks for confirmation (unless `-y`), then permanently deletes all of it, archives included.
 
 In **exam mode** a failure only tells you where the trace is (like the real exam). In **practice mode** the trace is printed directly.
@@ -59,6 +74,7 @@ In **exam mode** a failure only tells you where the trace is (like the real exam
 |---|---|
 | Python 3.8+ | standard library only |
 | `cc` / `gcc` / `clang` | for C exams (override with `CC=...`) |
+| `git` | for the push-to-submit workflow; skipped with a note if missing |
 | `nm` | for the allowed-functions check (override with `NM=...`); skipped with a note if missing |
 | `valgrind` | optional, for leak checks (rank03 `broken_gnl`); skipped with a note if missing |
 | Linux / macOS / WSL | native Windows lacks POSIX headers such as `unistd.h`; `filter`'s short-read test is Linux-only |
@@ -72,7 +88,7 @@ In **exam mode** a failure only tells you where the trace is (like the real exam
 
 ## How grading works
 
-1. Only the expected files are copied from `rendu/<exercise>/` to a temp directory.
+1. Only the expected files are copied from `rendu/<exercise>/` (with git: from the pushed commit) to a temp directory.
 2. Your code is compiled with `-Wall -Wextra -Werror`, together with the harness for function exercises.
 3. The object files are checked with `nm`: any external symbol not in `allowed_functions` fails the exercise. Compiler substitutions are tolerated (`printf` allows `puts`/`putchar`).
 4. The **reference solution** is built and both programs run on the same test cases: fixed edge cases plus random ones. stdout and exit code must match (exactly, or per the exercise's `compare` mode), and crashes and timeouts are reported.

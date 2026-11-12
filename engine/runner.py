@@ -304,7 +304,8 @@ def _case_trace(ex: Exercise, index: int, total: int, case: Case, variant: dict,
 
 
 def grade(ex: Exercise, submission: Path, tc: Toolchain, languages: dict,
-          seed: Optional[int] = None) -> Result:
+          seed: Optional[int] = None, where: Optional[str] = None) -> Result:
+    """Grade the files in `submission`; `where` is how that place is named in traces."""
     lang = languages.get(ex.language)
     if lang is None:
         return Result(False, f"Unknown language '{ex.language}'", internal=True)
@@ -318,7 +319,7 @@ def grade(ex: Exercise, submission: Path, tc: Toolchain, languages: dict,
         missing = [f"a {lang.get('source_ext', 'source')} file"]
     if missing:
         return Result(False, "Missing file(s): " + ", ".join(missing),
-                      trace=f"Expected in {submission}: {', '.join(ex.files)}")
+                      trace=f"Expected in {where or submission}: {', '.join(ex.files)}")
     ref_names, ref_missing = ex.collect_files(ex.reference_dir)
     if ref_missing:
         return Result(False, "Reference solution incomplete: " + ", ".join(ref_missing),

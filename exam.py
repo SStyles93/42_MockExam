@@ -8,6 +8,7 @@
     -c, --clear                     delete all exam data and archives, then fresh exam
     -l, --list                      list exams and exercises
     -t, --selftest                  check every reference solution passes its own tests
+    -g, --git                       practice: grade only what was pushed (always on in exams)
     -y, --yes                       skip confirmation questions
 """
 from __future__ import annotations
@@ -18,13 +19,16 @@ if sys.version_info < (3, 8):
     sys.exit("MockExam needs Python 3.8 or newer")
 
 import argparse
+import os
 import random
 import shutil
+import stat
+import tempfile
 import time
 from pathlib import Path
 from typing import Optional
 
-from engine import ui
+from engine import ui, vcs
 from engine.exercise import Exam, Exercise, ExerciseError, list_exams, load_exam
 from engine.runner import Toolchain, grade, load_languages
 from engine.session import Session
@@ -36,9 +40,11 @@ SUBJECTS_DIR = ROOT / "subjects"
 TRACES_DIR = ROOT / "traces"
 ARCHIVE_DIR = ROOT / "archive"
 SESSION_FILE = ROOT / ".session.json"
+VOGSPHERE_DIR = ROOT / ".vogsphere"          # fake git server
+REMOTE_REPO = VOGSPHERE_DIR / "rendu.git"
 
 HELP = """\
-  grademe        submit the current exercise for grading
+  grademe        grade the current exercise (with git: only what was pushed)
   status         show level, exercise and remaining time
   subject        print the current subject
   help           show this help
@@ -60,6 +66,10 @@ class Shell:
     @property
     def practice(self) -> bool:
         return self.session["mode"] == "practice"
+
+    @property
+    def git(self) -> bool:
+        return bool(self.session.get("git"))
 
     def current(self) -> Optional[Exercise]:
         key = self.session.get("exercise")
@@ -103,7 +113,8 @@ class Shell:
     def cmd_status(self, _arg: str = "") -> None:
         ex = self.current()
         print(ui.rule())
-        print(f"  {ui.bold(self.exam.title)}  [{'practice' if self.practice else 'exam'}]")
+        print(f"  {ui.bold(self.exam.title)}  [{'practice' if self.practice else 'exam'}]"
+              + ("  [git: push before grademe]" if self.git else ""))
         if not self.practice:
             level = min(self.session["level"] + 1, len(self.exam.levels))
             print(f"  level    : {level}/{len(self.exam.levels)}"
@@ -167,8 +178,7 @@ class Shell:
             return
 
         print(ui.dim("Grading..."))
-        result = grade(ex, RENDU_DIR / ex.name, self.toolchain, self.languages,
-                       seed=random.randrange(1 << 30))
+        result = self.grade_submission(ex)
         self.session["grademes"] = self.session.get("grademes", 0) + 1
         for note in result.notes:
             print(ui.yellow(f"note: {note}"))
@@ -192,6 +202,29 @@ class Shell:
                 print(f"Trace: {self.rel(trace_file)}")
             self.on_failure(ex)
         self.session.save()
+
+    def grade_submission(self, ex: Exercise):
+        seed = random.randrange(1 << 30)
+        where = f"rendu/{ex.name}"
+        if not self.git:
+            return grade(ex, RENDU_DIR / ex.name, self.toolchain, self.languages,
+                         seed=seed, where=where)
+        # like the real exam: only what was pushed counts, silently
+        with tempfile.TemporaryDirectory(prefix="mockexam-pushed-") as tmp:
+            pushed = Path(tmp) / ex.name
+            vcs.export_pushed(REMOTE_REPO, ex.name, pushed)
+            return grade(ex, pushed, self.toolchain, self.languages,
+                         seed=seed, where=where)
+
+    def setup_git(self) -> None:
+        if not self.git:
+            return
+        if not vcs.git_available():
+            print(ui.yellow("warning: git not found; grading the files in rendu/ directly."))
+            self.session["git"] = False
+            self.session.save()
+            return
+        vcs.init(RENDU_DIR, REMOTE_REPO)
 
     def write_trace(self, ex: Exercise, result) -> Path:
         TRACES_DIR.mkdir(exist_ok=True)
@@ -230,6 +263,10 @@ class Shell:
         elif sys.platform == "win32":
             print(ui.yellow("warning: native Windows lacks POSIX headers (unistd.h); "
                             "run MockExam from WSL for C exams."))
+        self.setup_git()
+        if self.git:
+            print(ui.bold("rendu/ is a git repository: git add, git commit and git push "
+                          "your work. Only what is pushed is graded."))
         if self.current() is None and not self.session.get("finished"):
             pool = (self.exam.all_exercises() if self.practice
                     else self.exam.levels[self.session["level"]])
@@ -278,7 +315,10 @@ def choose_exam(requested: Optional[str]) -> str:
     for i, name in enumerate(exams, 1):
         print(f"  {i}) {name}")
     while True:
-        answer = input("Choose an exam: ").strip()
+        try:
+            answer = input("Choose an exam: ").strip()
+        except EOFError:
+            sys.exit(1)
         if answer.isdigit() and 1 <= int(answer) <= len(exams):
             return exams[int(answer) - 1]
         if answer in exams:
@@ -302,13 +342,15 @@ def confirm_overwrite(existing: Optional[Session], yes: bool) -> None:
 def archive_workspace() -> Optional[Path]:
     """Move rendu/ and traces/ aside so a restart begins with an empty rendu/,
     without ever deleting the student's code."""
-    if SUBJECTS_DIR.exists():
-        shutil.rmtree(SUBJECTS_DIR)
+    for d in (SUBJECTS_DIR, VOGSPHERE_DIR):  # rendu/.git keeps everything that was pushed
+        if d.exists():
+            _rmtree(d)
     to_move = [d for d in (RENDU_DIR, TRACES_DIR)
-               if d.exists() and any(p.is_file() for p in d.rglob("*"))]
+               if d.exists() and any(p.is_file() and ".git" not in p.relative_to(d).parts
+                                     for p in d.rglob("*"))]
     for d in (RENDU_DIR, TRACES_DIR):
         if d.exists() and d not in to_move:
-            shutil.rmtree(d)  # only empty directories left
+            _rmtree(d)  # only empty dirs (and .git) left
     if not to_move:
         return None
     dest = ARCHIVE_DIR / time.strftime("%Y%m%d-%H%M%S")
@@ -318,7 +360,18 @@ def archive_workspace() -> Optional[Path]:
     return dest
 
 
-WORKSPACE_DIRS = (RENDU_DIR, SUBJECTS_DIR, TRACES_DIR, ARCHIVE_DIR)
+def _rmtree(path: Path) -> None:
+    """rmtree that also removes read-only files (git objects block deletion on Windows)."""
+    def force(func, target, _exc):
+        os.chmod(target, stat.S_IWRITE)
+        func(target)
+    if sys.version_info >= (3, 12):
+        shutil.rmtree(path, onexc=force)
+    else:
+        shutil.rmtree(path, onerror=force)
+
+
+WORKSPACE_DIRS = (RENDU_DIR, SUBJECTS_DIR, TRACES_DIR, ARCHIVE_DIR, VOGSPHERE_DIR)
 
 
 def confirm_clear(yes: bool) -> bool:
@@ -334,7 +387,7 @@ def clear_workspace() -> None:
     """Delete every runtime file MockExam created (never touches exams/)."""
     for d in WORKSPACE_DIRS:
         if d.exists():
-            shutil.rmtree(d)
+            _rmtree(d)
     SESSION_FILE.unlink(missing_ok=True)
 
 
@@ -373,11 +426,16 @@ def main() -> int:
                         help="exam to use (e.g. rank02); alone, starts a new timed exam")
     parser.add_argument("-p", "--practice", nargs="?", const="", metavar="EXERCISE",
                         help="untimed practice mode, optionally on a given exercise")
+    parser.add_argument("-g", "--git", action="store_true",
+                        help="practice mode: grade only what was pushed (always on in exams)")
     parser.add_argument("-y", "--yes", action="store_true",
                         help="skip confirmation questions")
     args = parser.parse_args()
-    if (args.list or args.selftest) and (args.exam or args.practice is not None or args.yes):
+    if (args.list or args.selftest) and (args.exam or args.practice is not None
+                                         or args.yes or args.git):
         parser.error("-l/--list and -t/--selftest take no other option")
+    if args.git and args.practice is None:
+        parser.error("-g/--git is for practice mode (-p); exams always use git")
 
     try:
         if args.selftest:
@@ -413,7 +471,7 @@ def main() -> int:
             if args.practice and first is None:
                 sys.exit(f"Unknown exercise '{args.practice}'. Try -l.")
             session = Session.new(SESSION_FILE, exam=exam.name, mode="practice",
-                                  level=0, deadline=None, exercise=None)
+                                  level=0, deadline=None, exercise=None, git=args.git)
             shell = Shell(exam, session)
             if first:
                 shell.assign(first)
@@ -425,7 +483,7 @@ def main() -> int:
             exam = load_exam(EXAMS_DIR, choose_exam(args.exam or previous_exam))
             session = Session.new(SESSION_FILE, exam=exam.name, mode="exam", level=0,
                                   deadline=time.time() + exam.duration_minutes * 60,
-                                  exercise=None)
+                                  exercise=None, git=True)
             print(ui.bold(f"Starting {exam.title}: {exam.duration_minutes} minutes, "
                           f"{len(exam.levels)} level(s). Good luck!"))
         else:
