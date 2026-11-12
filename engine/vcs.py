@@ -6,6 +6,7 @@ Standard library only; needs the `git` executable.
 from __future__ import annotations
 
 import io
+import os
 import shutil
 import subprocess
 import tarfile
@@ -36,7 +37,10 @@ def init(rendu: Path, remote: Path) -> None:
         _git(["init", "-q"], cwd=rendu)
         _git(["symbolic-ref", "HEAD", f"refs/heads/{BRANCH}"], cwd=rendu)
 
-    url = str(remote.resolve())
+    # Relative, so the same repo works from WSL, Git Bash, macOS... (an absolute
+    # /mnt/c/... path written under WSL is meaningless to Git for Windows).
+    # git runs remote operations from the worktree root, so this resolves from rendu/.
+    url = Path(os.path.relpath(remote.resolve(), rendu.resolve())).as_posix()
     if _git(["remote", "get-url", "origin"], cwd=rendu, check=False).returncode == 0:
         _git(["remote", "set-url", "origin", url], cwd=rendu)
     else:
