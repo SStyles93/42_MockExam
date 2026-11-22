@@ -78,8 +78,27 @@ class Shell:
         return self.exam.find(key) if key else None
 
     def remaining(self) -> Optional[float]:
+        paused = self.session.get("time_left")
+        if paused is not None:
+            return paused
         deadline = self.session.get("deadline")
         return None if deadline is None else deadline - time.time()
+
+    def pause_clock(self) -> None:
+        """Freeze the exam clock: store the time left instead of a running deadline."""
+        if self.session.get("deadline") is None or self.session.get("time_left") is not None:
+            return
+        self.session["time_left"] = max(0.0, self.session["deadline"] - time.time())
+        self.session.save()
+
+    def resume_clock(self) -> None:
+        """Restart a paused clock with exactly the time that was left."""
+        paused = self.session.get("time_left")
+        if paused is None:
+            return
+        self.session["deadline"] = time.time() + paused
+        self.session["time_left"] = None
+        self.session.save()
 
     def points(self) -> int:
         return round(100 * self.session["level"] / len(self.exam.levels))
@@ -260,6 +279,15 @@ class Shell:
 
     # -------------------------------------------------------------- loop --
     def run(self) -> None:
+        self.resume_clock()
+        _exit_on_hangup()
+        try:
+            self._run()
+        finally:  # however the shell is left, the exam clock stops
+            self.pause_clock()
+            print("Session saved (exam clock paused). Run exam.py again to resume.")
+
+    def _run(self) -> None:
         if self.toolchain.cc is None:
             print(ui.yellow("warning: no C compiler found (cc/gcc/clang). Set CC=... or use WSL."))
         elif sys.platform == "win32":
@@ -300,7 +328,22 @@ class Shell:
             except KeyboardInterrupt:
                 print(ui.yellow("\ninterrupted"))
         self.session.save()
-        print("Session saved. Run exam.py again to resume.")
+
+
+def _exit_on_hangup() -> None:
+    """Turn 'terminal closed' / 'killed' signals into a normal exit, so the
+    finally block in Shell.run still pauses the clock."""
+    import signal
+
+    def leave(_signum, _frame):
+        raise SystemExit(0)
+    for name in ("SIGHUP", "SIGTERM", "SIGBREAK"):
+        sig = getattr(signal, name, None)
+        if sig is not None:
+            try:
+                signal.signal(sig, leave)
+            except (OSError, ValueError):
+                pass
 
 
 # ------------------------------------------------------------------ CLI --
