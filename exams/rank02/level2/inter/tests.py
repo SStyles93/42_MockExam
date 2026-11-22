@@ -1,7 +1,7 @@
 from engine.testgen import text
 
 FIXED = [[], ["one"], ["a", "b", "c"], ["mississippi", "pins"], ["hello world", "lower"],
-         ["abc", "xyz"], ["", "abc"], ["abc", ""], ["aaa", "a"], ["a b", " "]]
+         ["abc", "xyz"], ["", "abc"], ["abc", ""], ["", ""], ["aaa", "a"], ["a b", " "]]
 
 
 def cases(rng):

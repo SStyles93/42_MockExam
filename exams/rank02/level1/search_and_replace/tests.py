@@ -3,7 +3,8 @@ from engine.testgen import sentence
 FIXED = [
     [], ["only one"], ["two", "args"], ["a", "b", "c", "d"],
     ["banana bread", "a", "o"], ["banana", "x", "y"], ["banana", "an", "o"],
-    ["banana", "a", "on"], ["", "a", "b"], ["aaaa", "a", "a"], ["Case Sensitive", "s", "Z"],
+    ["banana", "a", "on"], ["", "a", "b"], ["", "", ""], ["banana", "", "b"],
+    ["banana", "a", ""], ["aaaa", "a", "a"], ["Case Sensitive", "s", "Z"],
 ]
 LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 

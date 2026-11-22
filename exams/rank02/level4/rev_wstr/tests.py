@@ -1,6 +1,6 @@
 from engine.testgen import simple_sentence
 
-FIXED = [[], ["a", "b"], ["alone"], ["the last shall be first"], ["a b"]]
+FIXED = [[], ["a", "b"], [""], ["alone"], ["the last shall be first"], ["a b"]]
 
 
 def cases(rng):
