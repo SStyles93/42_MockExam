@@ -1,6 +1,6 @@
 # 42_MockExam
 
-A 42-style exam simulator for training before the real exam: random exercise per level, a countdown timer, `grademe`, and traces when you fail.
+A 42-style exam simulator for training before the real exam: random exercise per level, a countdown timer, `grademe`, traces when you fail, and a persistent history that biases the random pick toward exercises you have never tried or keep failing.
 
 Pure Python 3.8+ with the **standard library only**. Nothing to install: clone and run.
 
@@ -17,8 +17,8 @@ Without options it resumes the current session, or starts a new exam.
 | `-e NAME` | `--exam NAME` | start a new timed exam (e.g. `-e rank02`) |
 | `-p [EX]` | `--practice [EX]` | untimed practice, full traces printed on failure |
 | `-r` | `--restart` | fresh exam; old `rendu/` and `traces/` moved to `archive/` |
-| `-c` | `--clear` | delete all exam data and archives, then a fresh exam (asks first) |
-| `-l` | `--list` | list exams and exercises |
+| `-c` | `--clear` | delete all exam data, archives **and history**, then a fresh exam (asks first) |
+| `-l` | `--list` | list exams and exercises with history symbols and stats |
 | `-t` | `--selftest` | check every reference solution passes its own tests |
 | `-g` | `--git` | practice mode: grade only what was pushed (always on in exams) |
 | `-y` | `--yes` | skip confirmation questions |
@@ -43,7 +43,7 @@ Inside the shell:
 | `grademe` | submit the current exercise |
 | `status` | level, exercise, time left, points |
 | `subject` | print the subject |
-| `next` / `pick NAME` / `list` | practice mode only: change exercise |
+| `next` / `pick NAME` / `list` | practice mode only: change exercise; `list` shows history per exercise |
 | `exit` | leave; the session is saved and resumes on the next launch |
 
 While the exam runs:
@@ -70,6 +70,40 @@ Forgotten files, uncommitted edits and unpushed commits fail silently, exactly l
 Restarting (`-r`) moves your previous `rendu/` and `traces/` to `archive/<date>/`, so the new exam starts with an empty `rendu/` and no code is ever deleted. Clearing (`-c`) asks for confirmation (unless `-y`), then permanently deletes all of it, archives included.
 
 In **exam mode** a failure only tells you where the trace is (like the real exam). In **practice mode** the trace is printed directly.
+
+### Exercise history
+
+Every `grademe` — in both exam and practice mode — is recorded in `.history.json`. That history drives two things:
+
+**Weighted random pick.** When an exercise is chosen at random (new assignment, `next`, level-up, re-roll on failure), exercises are not drawn uniformly. The probability is proportional to a weight based on past performance:
+
+| Situation | Weight |
+|---|---|
+| Never attempted | 4 |
+| Attempted, failure rate ≥ 50 % | 3 |
+| Attempted, failure rate > 0 % | 2 |
+| Attempted, always passed | 1 |
+
+Every exercise stays reachable; exercises you struggle with or have never touched are just more likely to come up.
+
+**History display.** The `list` command (and `-l` flag) shows a symbol and stats for each exercise:
+
+```
+  level 1:
+    ·  ft_strlen            never tried
+    ✓  first_word           3 done · 3 passed · 0 failed
+    ~  fizzbuzz             5 done · 3 passed · 2 failed
+    ✗  ft_putstr            2 done · 0 passed · 2 failed
+```
+
+| Symbol | Meaning |
+|---|---|
+| `·` (dim) | never tried |
+| `✓` (green) | always passed |
+| `~` (yellow) | some failures, pass rate ≥ 50 % |
+| `✗` (red) | pass rate < 50 % |
+
+History survives `-r`/`--restart` and normal relaunches. Only `-c`/`--clear` wipes it.
 
 ## Requirements
 

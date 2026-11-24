@@ -20,6 +20,7 @@ if sys.version_info < (3, 8):
     sys.exit("MockExam needs Python 3.8 or newer")
 
 import argparse
+import json
 import os
 import random
 import shutil
@@ -42,8 +43,50 @@ SUBJECTS_DIR = ROOT / "subjects"
 TRACES_DIR = ROOT / "traces"
 ARCHIVE_DIR = ROOT / "archive"
 SESSION_FILE = ROOT / ".session.json"
+HISTORY_FILE = ROOT / ".history.json"
 VOGSPHERE_DIR = ROOT / ".vogsphere"          # fake git server
 REMOTE_REPO = VOGSPHERE_DIR / "rendu.git"
+
+def _load_history(exam_name: str) -> dict:
+    """Return {exercise_id: {attempts, failures}} for the given exam."""
+    if not HISTORY_FILE.is_file():
+        return {}
+    try:
+        return json.loads(HISTORY_FILE.read_text(encoding="utf-8")).get(exam_name, {})
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_history(exam_name: str, history: dict) -> None:
+    try:
+        data = json.loads(HISTORY_FILE.read_text(encoding="utf-8")) if HISTORY_FILE.is_file() else {}
+    except (OSError, ValueError):
+        data = {}
+    data[exam_name] = history
+    HISTORY_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+
+def _ex_weight(record: Optional[dict]) -> int:
+    """Higher weight = more likely to be picked."""
+    if not record or record.get("attempts", 0) == 0:
+        return 4
+    failures = record.get("failures", 0)
+    if failures == 0:
+        return 1
+    return 3 if failures / record["attempts"] >= 0.5 else 2
+
+
+def _ex_symbol(record: Optional[dict]):
+    """Return (symbol, color_fn) reflecting the exercise's history."""
+    if not record or record.get("attempts", 0) == 0:
+        return "·", ui.dim
+    failures = record.get("failures", 0)
+    if failures == 0:
+        return "✓", ui.green
+    if failures / record["attempts"] >= 0.5:
+        return "✗", ui.red
+    return "~", ui.yellow
+
 
 HELP = """\
   grademe        grade the current exercise (with git: only what was pushed)
@@ -63,6 +106,7 @@ class Shell:
         self.session = session
         self.toolchain = Toolchain.detect()
         self.languages = load_languages()
+        self.history = _load_history(exam.name)
 
     # ------------------------------------------------------------- state --
     @property
@@ -105,7 +149,8 @@ class Shell:
 
     def pick_random(self, pool, exclude: Optional[Exercise] = None) -> Exercise:
         choices = [ex for ex in pool if exclude is None or ex.id != exclude.id] or list(pool)
-        return random.choice(choices)
+        weights = [_ex_weight(self.history.get(ex.id)) for ex in choices]
+        return random.choices(choices, weights=weights, k=1)[0]
 
     def assign(self, ex: Exercise) -> None:
         self.session["exercise"] = ex.id
@@ -161,7 +206,18 @@ class Shell:
 
     def cmd_list(self, _arg: str = "") -> None:
         for i, level in enumerate(self.exam.levels, 1):
-            print(f"  level {i}: " + ", ".join(ex.name for ex in level))
+            print(f"  level {i}:")
+            for ex in sorted(level, key=lambda e: e.name):
+                rec = self.history.get(ex.id)
+                sym, color = _ex_symbol(rec)
+                if not rec or rec.get("attempts", 0) == 0:
+                    detail = "never tried"
+                else:
+                    passes = rec["attempts"] - rec.get("failures", 0)
+                    detail = (f"{rec['attempts']} done · "
+                              f"{passes} passed · "
+                              f"{rec.get('failures', 0)} failed")
+                print(f"    {color(sym)}  {ex.name:<25} {color(detail)}")
 
     def cmd_next(self, _arg: str = "") -> None:
         if not self.practice:
@@ -256,6 +312,9 @@ class Shell:
         return path
 
     def on_success(self, ex: Exercise) -> None:
+        rec = self.history.setdefault(ex.id, {"attempts": 0, "failures": 0})
+        rec["attempts"] += 1
+        _save_history(self.exam.name, self.history)
         if self.practice:
             print("Type 'next' for another exercise, or 'pick NAME'.")
             return
@@ -268,6 +327,10 @@ class Shell:
             self.assign(self.pick_random(self.exam.levels[self.session["level"]]))
 
     def on_failure(self, ex: Exercise) -> None:
+        rec = self.history.setdefault(ex.id, {"attempts": 0, "failures": 0})
+        rec["attempts"] += 1
+        rec["failures"] = rec.get("failures", 0) + 1
+        _save_history(self.exam.name, self.history)
         self.session["failures"] = self.session.get("failures", 0) + 1
         if not self.practice and self.exam.reroll_on_fail:
             self.assign(self.pick_random(self.exam.levels[self.session["level"]], exclude=ex))
@@ -434,6 +497,7 @@ def clear_workspace() -> None:
         if d.exists():
             _rmtree(d)
     SESSION_FILE.unlink(missing_ok=True)
+    HISTORY_FILE.unlink(missing_ok=True)
 
 
 def selftest() -> int:
@@ -499,9 +563,21 @@ def main() -> int:
         if args.list:
             for name in list_exams(EXAMS_DIR):
                 exam = load_exam(EXAMS_DIR, name)
+                history = _load_history(name)
                 print(ui.bold(f"{name}: {exam.title} ({exam.duration_minutes} min)"))
                 for i, level in enumerate(exam.levels, 1):
-                    print(f"  level {i}: " + ", ".join(ex.name for ex in level))
+                    print(f"  level {i}:")
+                    for ex in sorted(level, key=lambda e: e.name):
+                        rec = history.get(ex.id)
+                        sym, color = _ex_symbol(rec)
+                        if not rec or rec.get("attempts", 0) == 0:
+                            detail = ""
+                        else:
+                            passes = rec["attempts"] - rec.get("failures", 0)
+                            detail = (f"  ({rec['attempts']} done, "
+                                      f"{passes} passed, "
+                                      f"{rec.get('failures', 0)} failed)")
+                        print(f"      {color(sym)}  {ex.name}{color(detail)}")
             return 0
 
         existing = Session.load(SESSION_FILE)
