@@ -342,6 +342,7 @@ class Shell:
 
     def finish(self) -> None:
         self.session["finished"] = True
+        self.pause_clock()
         self.session.save()
         print(ui.bold(f"Exam finished. Final grade: {self.points()}/100"))
 
