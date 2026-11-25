@@ -149,6 +149,11 @@ class Shell:
 
     def pick_random(self, pool, exclude: Optional[Exercise] = None) -> Exercise:
         choices = [ex for ex in pool if exclude is None or ex.id != exclude.id] or list(pool)
+        never_done = [ex for ex in choices
+                      if not self.history.get(ex.id)
+                      or self.history[ex.id].get("attempts", 0) == 0]
+        if never_done:
+            return random.choice(never_done)
         weights = [_ex_weight(self.history.get(ex.id)) for ex in choices]
         return random.choices(choices, weights=weights, k=1)[0]
 
