@@ -226,3 +226,4 @@ traces/
 archive/
 .session.json
 .vogsphere/
+.history.json
